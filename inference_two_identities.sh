@@ -1,0 +1,1 @@
+python sample_video.py --base configs/cogvideox_5b.yaml configs/inference/inference_two_identities.yaml --seed 42 

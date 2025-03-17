@@ -1,0 +1,16 @@
+args:
+  image2video: False # True for image2video, False for text2video
+  contextimage2video: True
+  latent_channels: 16
+  mode: inference
+  load: "./models/single-identity/"
+  batch_size: 1
+  input_type: txt
+  input_file: ./examples/single_identity.txt
+  sampling_image_size: [480, 720]
+  sampling_num_frames: 13  # Must be 13, 11 or 9
+  sampling_fps: 8
+#  fp16: True # For CogVideoX-2B
+  bf16: True # For CogVideoX-5B and CoGVideoX-5B-I2V
+  output_dir: outputs/single-identity
+  force_inference: True
