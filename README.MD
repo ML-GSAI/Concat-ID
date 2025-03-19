@@ -134,7 +134,7 @@ bash finetune_two_identities.sh # Multi GPUs
 The SAT weight format differs from Huggingface's format. If you want to convert the weights, please run [this script](https://github.com/THUDM/CogVideo/blob/main/tools/convert_weight_sat2hf.py).
 
 ### Limitations
-+ Due to limitations in the base model’s capabilities （i.e., CogVideo-5B）, we do not compare our method with closed-source commercial tools.
++ Due to limitations in the base model’s capabilities （i.e., CogVideoX-5B）, we do not compare our method with closed-source commercial tools.
 + Currently, we utilize VAEs solely as feature extractors, relying on the model’s inherent ability to process low-level features.
 + Similar to common video generation models, our approach faces challenges in preserving the integrity of human body structures, such as the number of fingers, when handling particularly complex motions.
 
