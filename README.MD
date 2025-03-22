@@ -5,6 +5,9 @@
 
 This project, including both inference and training code, is based on [CogVideoX1.0 SAT](https://github.com/THUDM/CogVideo/releases/tag/v1.0) and [SAT](https://github.com/THUDM/SwissArmyTransformer).
 
+## ToDo List
+- [ ] We will apply our method to Wan2.1-1.3B as soon as possible.
+
 ## Inference Model
 
 We only tested the inference script on the H800, and it required a maximum of 24 GB of GPU memory. However, this requirement may vary depending on different server environments.
