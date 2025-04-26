@@ -1,6 +1,92 @@
 # Concat-ID
+[![arXiv](https://img.shields.io/badge/arXiv-2503.13265-red.svg)](https://arxiv.org/abs/2503.14151)
 
-This project, including both inference and training code, is based on [CogVideoX1.0 SAT](https://github.com/THUDM/CogVideo/releases/tag/v1.0) and [SAT](https://github.com/THUDM/SwissArmyTransformer).
+[![deploy](https://img.shields.io/badge/Project%20Page-black)](https://ml-gsai.github.io/Concat-ID-demo/)
+
+# 🔥 Latest News!
+* Apr 26, 2025: We release the first-stage models of Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios.
+
+# ToDo List
+- [ ] Improving the model architecture and training strategy.
+
+Identity-preserving video generation is an interesting research topic, and therefore, we look forward to progressively improving this project.
+
+# Concat-ID-Wan
+
+We release the first-stage model of Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios. 
+
+### 1. Install all dependencies
+
+```
+git clone https://github.com/modelscope/DiffSynth-Studio.git
+cd DiffSynth-Studio
+pip install -e .
+pip install insightface onnxruntime
+```
+
+### 2. Run scripts to generate videos
+```python
+python inference_wan.py --image_path="{your_image_path}" --prompt="{your_prompt}"
+```
+
+#### For instance:
+
+``` python
+python inference_wan.py --image_path="examples/images/69_politicians_woman_Tulsi_Gabbard_4.png" --prompt="A woman, dressed in casual attire, sits by a sunlit window sketching in a notebook, pausing occasionally to look up with a playful grin. As sunlight filters through the sheer curtains, casting soft shadows across the room, the woman twirls a pencil absentmindedly before adding quick strokes to the page. The scene is alive with a sense of relaxed creativity, as the warm afternoon glow bathes the space in a gentle, inviting atmosphere." --output_dir="output/1/"
+```
+
+``` python
+python inference_wan.py --image_path="examples/images/43_stars_man_Leonardo_DiCaprio_3.png" --prompt="A man with a distant look in his eyes stands alone on the deck of the Titanic, gripping the railing tightly. He watches the horizon, lost in thought, as the cold sea breeze brushes against his face. His mind drifts between excitement for the journey ahead and an unshakable sense of unease about what lies beneath the surface of the dark, mysterious waters." --output_dir="output/2/"
+```
+
+``` python
+python inference_wan.py --image_path="examples/images/80_normal_man_5.jpg" --prompt="On a warm summer evening, a tall and athletic person is energetically playing a basketball game on the well-lit community court, dribbling the ball with expert precision, dodging imaginary opponents, and shooting hoops with impressive accuracy." --output_dir="output/3/"
+```
+
+<table style="width: 100%; border-collapse: collapse; text-align: center; border: 1px solid #ccc;">
+  <tr>
+    <th style="text-align: center;">
+      <strong>Reference images</strong>
+    </th>
+    <th style="text-align: center;">
+      <strong>Generated videos</strong>
+    </th>
+  </tr>
+
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/cropped_images/1.png" alt="Image" style="height: 180px;">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/results/1.gif" alt="GIF" style="width: 400px;">
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/cropped_images/2.png" alt="Image" style="height: 180px;">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/results/2.gif" alt="GIF" style="width: 400px;">
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/cropped_images/3.png" alt="Image" style="height: 180px;">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/results/3.gif" alt="GIF" style="width: 400px;">
+    </td>
+  </tr>
+</table>
+
+
+
+
+# Concat-ID-CogVideo
+
+This part, including both inference and training code, is based on [CogVideoX1.0 SAT](https://github.com/THUDM/CogVideo/releases/tag/v1.0) and [SAT](https://github.com/THUDM/SwissArmyTransformer).
 
 ## Inference Model
 
@@ -130,9 +216,15 @@ bash finetune_two_identities.sh # Multi GPUs
 
 The SAT weight format differs from Huggingface's format. If you want to convert the weights, please run [this script](https://github.com/THUDM/CogVideo/blob/main/tools/convert_weight_sat2hf.py).
 
+### Limitations
++ Due to limitations in the base model’s capabilities （i.e., CogVideoX-5B）, we do not compare our method with closed-source commercial tools.
++ Currently, we utilize VAEs solely as feature extractors, relying on the model’s inherent ability to process low-level features.
++ Similar to common video generation models, our approach faces challenges in preserving the integrity of human body structures, such as the number of fingers, when handling particularly complex motions.
 
 ### Related Links
 We appreciate the following works:
++ [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio)
++ [Wan2.1](https://github.com/Wan-Video/Wan2.1)
 + [CogVideoX](https://github.com/THUDM/CogVideo/)
 + [ConsisID](https://github.com/PKU-YuanGroup/ConsisID)
 + [InsightFace](https://github.com/deepinsight/insightface)
