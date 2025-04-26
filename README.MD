@@ -58,8 +58,7 @@ python inference_wan.py --image_path="examples/images/80_normal_man_5.jpg" --pro
       <img src="examples/cropped_images/1.png" alt="Image" style="height: 180px;">
     </td>
     <td style="text-align: center; vertical-align: middle;">
-<video autoplay loop muted playsinline style="width: 400px;">
-        <source src="examples/results/1.mp4" type="video/mp4">
+        <img src="examples/results/1.gif" alt="GIF" style="width: 400px;">
     </td>
   </tr>
 
@@ -68,8 +67,7 @@ python inference_wan.py --image_path="examples/images/80_normal_man_5.jpg" --pro
       <img src="examples/cropped_images/2.png" alt="Image" style="height: 180px;">
     </td>
     <td style="text-align: center; vertical-align: middle;">
-<video autoplay loop muted playsinline style="width: 400px;">
-        <source src="examples/results/2.mp4" type="video/mp4">
+        <img src="examples/results/2.gif" alt="GIF" style="width: 400px;">
     </td>
   </tr>
 
@@ -78,8 +76,7 @@ python inference_wan.py --image_path="examples/images/80_normal_man_5.jpg" --pro
       <img src="examples/cropped_images/3.png" alt="Image" style="height: 180px;">
     </td>
     <td style="text-align: center; vertical-align: middle;">
-<video autoplay loop muted playsinline style="width: 400px;">
-        <source src="examples/results/3.mp4" type="video/mp4">
+        <img src="examples/results/3.gif" alt="GIF" style="width: 400px;">
     </td>
   </tr>
 </table>
