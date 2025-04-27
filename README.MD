@@ -13,7 +13,7 @@ Identity-preserving video generation is an interesting research topic, and there
 
 # Concat-ID-Wan
 
-We release the first-stage model of Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios. 
+We release the first-stage model of Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios. We first train Concat-ID-Wan on approximately 600,000 49-frame videos, and then fine-tune it on approximately 700,000 81-frame videos.
 
 ### 1. Install all dependencies
 
