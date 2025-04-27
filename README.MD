@@ -7,7 +7,7 @@
 * Apr 26, 2025: We release the first-stage models of Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios.
 
 # ToDo List
-- [ ] Improving the model architecture and training strategy.
+- [ ] Improving the model architecture and training strategy, and training the Wan2.1-T2V-1.3B on 720P videos.
 
 Identity-preserving video generation is an interesting research topic, and therefore, we look forward to progressively improving this project.
 
