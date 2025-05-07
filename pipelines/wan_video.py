@@ -407,6 +407,11 @@ def model_fn_wan_video(
     t_mod = dit.time_projection(t).unflatten(1, (6, dit.dim))
     context = dit.text_embedding(context)
     
+    if hasattr(dit, "time_projection_ref"):
+        t_mod_ref = dit.time_projection_ref(t).unflatten(1, (6, dit.dim))
+    else:
+        t_mod_ref = None
+    
     if dit.has_image_input:
         x = torch.cat([x, y], dim=1)  # (b, c_x + c_y, f, h, w)
         clip_embdding = dit.img_emb(clip_feature)
@@ -429,7 +434,10 @@ def model_fn_wan_video(
     
     # TeaCache
     if tea_cache is not None:
-        tea_cache_update = tea_cache.check(dit, x, t_mod)
+        if t_mod_ref is not None:
+            tea_cache_update = tea_cache.check(dit, x, t_mod, t_mod_ref)
+        else:
+            tea_cache_update = tea_cache.check(dit, x, t_mod)
     else:
         tea_cache_update = False
     
@@ -441,7 +449,10 @@ def model_fn_wan_video(
         x = tea_cache.update(x)
     else:
         for block in dit.blocks:
-            x = block(x, context, t_mod, freqs) # ref_image_length
+            if t_mod_ref is not None:
+                x = block(x, context, t_mod, t_mod_ref, freqs) 
+            else:
+                x = block(x, context, t_mod, freqs)
         if tea_cache is not None:
             tea_cache.store(x)
 

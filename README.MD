@@ -4,13 +4,125 @@
 [![deploy](https://img.shields.io/badge/Project%20Page-black)](https://ml-gsai.github.io/Concat-ID-demo/)
 
 # 🔥 Latest News!
-* Apr 26, 2025: We release the first-stage models of Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios.
+* May 7, 2025: We have released both the training and inference scripts for Concat-ID based on Wan2.1-T2V-1.3B, designed for single-identity scenarios. In this release, we introduce **an additional AdaLN module** to better process conditional reference images at different timesteps.
+
+* Apr 26, 2025: We release the first-stage models of Concat-ID based on Wan2.1-T2V-1.3B for single-identity scenarios.
+
+* March 18, 2025: We release the training and inference scripts and models of Concat-ID based on CogVideoX-5B for single-identity and two-identity scenarios.
 
 # ToDo List
 - [ ] Improving the model architecture and training strategy.
 - [ ] Training the Wan2.1-T2V-1.3B on 720P videos.
 
 Identity-preserving video generation is an interesting research topic, and therefore, we look forward to progressively improving this project.
+
+
+# Concat-ID-Wan-AdaLN
+
+We refine Concat-ID based on Wan2.1-T2V-1.3B for single identity scenarios, where we define an additional AdaLN module to better process conditional reference images at different timesteps. Note that the introduced AdaLN includes only about 14M parameters, which is negligible. We first trained Concat-ID-Wan on approximately 700,000 videos, and then fine-tuned it on approximately 200,000 cross-video pairs using a cosine similarity threshold of 0.87 to 0.97. We also release the training scripts based on [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio).
+
+
+### 1. Install all dependencies
+
+```
+git clone https://github.com/modelscope/DiffSynth-Studio.git
+cd DiffSynth-Studio
+pip install -e .
+pip install insightface onnxruntime
+```
+
+### 2. Run scripts to generate videos
+```python
+python inference_wan.py --use_adaln  --image_path="{your_image_path}" --prompt="{your_prompt}" 
+```
+
+#### For instance:
+
+``` python
+python inference_wan.py --use_adaln  --image_path="examples/images/72_politicians_woman_Tulsi_Gabbard_2.png" --prompt="A woman with sun-kissed skin and a gentle smile pauses amidst the vibrant blooms of a flower field, kneeling gracefully to pick a wild daisy, while a soft breeze playfully lifts her hair. The warm, golden sunlight casts intricate patterns of light and shadow across the petals, creating a serene yet lively atmosphere. She momentarily glance toward the camera, her eyes reflecting a joyful curiosity, as the landscape around her buzzes with the soft hum of nature." --output_dir="output/1"
+```
+
+``` python
+python inference_wan.py --use_adaln  --image_path="examples/images/73_politicians_woman_Harris_3.png" --prompt="A woman, with a sturdy build and focused demeanor, stands poised under the dappled sunlight, adjusting the settings on a sleek DSLR camera to capture the perfect shot of the vibrant, rolling hills that stretch out before her. The gentle breeze tousles her hair as she line up the frame, the golden hour casting warm shadows and creating a magical atmosphere. She take a deep breath, ready to capture the moment that will tell a story of tranquility and beauty, while her feet shift slightly to find the perfect angle, ensuring the composition is flawless." --output_dir="output/2"
+```
+
+``` python
+python inference_wan.py --use_adaln  --image_path="examples/images/93_normal_woman_3.jpg" --prompt="A woman, exuding a vibrant energy, stands under the gentle glow of the afternoon sun, wearing large sunglasses and a wide-brimmed sunhat. The warm rays cast playful shadows on her face as she smile brightly. She casually twirl a colorful beach towel in one hand while adjusting her sunglasses with the other, surrounded by the serene ambiance of a sun-dappled garden." --output_dir="output/3"
+```
+
+<table style="width: 100%; border-collapse: collapse; text-align: center; border: 1px solid #ccc;">
+  <tr>
+    <th style="text-align: center;">
+      <strong>Reference images</strong>
+    </th>
+    <th style="text-align: center;">
+      <strong>Generated videos</strong>
+    </th>
+  </tr>
+
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/cropped_images/4.png" alt="Image" style="height: 180px;">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+        <img src="examples/results/4.gif" alt="GIF" style="width: 400px;">
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/cropped_images/5.png" alt="Image" style="height: 180px;">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+        <img src="examples/results/5.gif" alt="GIF" style="width: 400px;">
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">
+      <img src="examples/cropped_images/6.png" alt="Image" style="height: 180px;">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+        <img src="examples/results/6.gif" alt="GIF" style="width: 400px;">
+    </td>
+  </tr>
+</table>
+
+### 3. Run scripts to training
+Firstly, we need to install additional packages:
+```
+pip install peft lightning pandas
+```
+
+
+Then, we need to prepare the JSON file for training data (please refer to [this subsection](#preparing-the-dataset)).
+
+Finally, we can run the training script `train_concat-id_wan2.1.py`. An example is shown below:
+
+```python
+python train_concat-id_wan2.1.py \
+  --train_architecture full \
+  --dataset_path "training-data.json" \
+  --text_encoder_path "models/Wan-AI/Wan2.1-T2V-1.3B/models_t5_umt5-xxl-enc-bf16.pth" \
+  --vae_path "models/Wan-AI/Wan2.1-T2V-1.3B/Wan2.1_VAE.pth" \
+  --dit_path "models/Wan-AI/Wan2.1-T2V-1.3B/diffusion_pytorch_model.safetensors" \
+  --num_frames 81 \
+  --height 480 \
+  --width 832 \
+  --max_epochs 1 \
+  --batch_size 1 \
+  --learning_rate 1e-5 \
+  --training_strategy deepspeed_stage_2 \
+  --accumulate_grad_batches 1 \
+  --use_gradient_checkpointing \
+  --save_train_steps 1000 \
+  --dataloader_num_workers 32 \
+  --use_swanlab \
+  --project_name train_concat-id_wan_adaln \
+  --skip_frms_num 3 \
+  --fps 16
+```
+For distributed training across multiple nodes and GPUs using MPI, please refer to [this issue](https://github.com/Lightning-AI/pytorch-lightning/issues/13639#issuecomment-1184719803). 
 
 # Concat-ID-Wan
 
